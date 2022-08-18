@@ -18,7 +18,7 @@ const PostArticle = ({ user }) => {
         postedBy: user._id, 
       });
 
-
+      
     const onImgChange =  useCallback((e) => {
       const [file] = e.target.files;
       var reader = new FileReader();

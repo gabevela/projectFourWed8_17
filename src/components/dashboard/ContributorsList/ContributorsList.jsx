@@ -1,10 +1,8 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import './ContributorsList.css'
 import * as Icon from 'react-bootstrap-icons';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { useState, useEffect } from 'react';
-
 
 // name
 // email
@@ -13,27 +11,95 @@ import { useState, useEffect } from 'react';
 
 const ContributorsList = ({ user }) => {
 
+    const [img, setImg] = useState();
+    const [imgLink, setImgLink] = useState();
     const[contributor, setContributor] = useState({
         name: '',
         email: '',
         city: '',
         country: '',
+        image: '',
         postedBy: user._id, 
       });
+      
+      const [formObj, setFormObj] = useState({});
+      useEffect( ()=>{
+        if( !(Object.keys(formObj).length === 0 )){
+          postContributor()
+        }
+      }, [formObj] 
+        )
+          
+      const onImgChange =  useCallback((e) => {
+        const [file] = e.target.files;
+        var reader = new FileReader();
+          reader.readAsDataURL(file); 
+          reader.onloadend = function() {
+            var base64data = reader.result;   
+            setImg(base64data)
+          }
+          // setArticle({
+          //     ...article, 
+          //     image: img
+          // })
+      }, [])
     
-    
-      const postContributor = async (e) => {
+      let setImage = async (e) => {
         e.preventDefault();
+        let responseOne = await fetch("http://localhost:3001/img", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+              photo: img // take this image, if all goes wel then ....
+          }),
+          })
+      
+          let responseTwo = await responseOne.json()
+      
+          console.log("cloudinary url :", responseTwo.imageurl )
+          setFormObj ( {...contributor, image: responseTwo.imageurl})
+      }
+
+
+      const postContributor = async () => {
+        
         console.log(contributor);
         // console.log(user._id);
 
         // '/api/contributorSubmissions'
 
         try {
+
+          // let responseOne = await fetch("http://localhost:3001/img", {
+          //   method: "POST",
+          //   headers: {
+          //       "Content-Type": "application/json",
+          //   },
+          //   body: JSON.stringify({
+          //       photo: img // take this image, if all goes wel then ....
+          //   }),
+          //   })
+        
+          //   let responseTwo = await responseOne.json()
+        
+          //   console.log("cloudinary url :", responseTwo.imageurl )
+          //   formObj = {...contributor, image: responseTwo.imageurl}
+
+
+            // setContributor({  // hook  - ? why is this not updating in time for the next api cal ?? 
+            //     ...contributor, 
+            //     image: responseTwo.imageurl   // this is the image url where it is stored and should be sent to the db, but it is 
+                // being stored as an empty string.... why?  
+            //})
+
+
+
         const res = await fetch('/api/contributorSubmissions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contributor: contributor }),
+          body: JSON.stringify({ contributor: formObj , img: formObj.image }),
         });
         console.log(res);
         if (res.statusText === 'OK') {
@@ -43,6 +109,7 @@ const ContributorsList = ({ user }) => {
             email: '',
             city: '',
             country: '',
+            image: '',
             postedBy: user._id, 
           });
         }
@@ -145,7 +212,9 @@ const ContributorsList = ({ user }) => {
               >
               </input>
               <br/>
-              <button onClick={postContributor} type="submit" className="btn btn-dark text-light col-2 mt-2">Submit</button>
+              <input type='file' onChange={onImgChange}/>
+              <img src={img} alt="article" style={{width:"200px"}}/>
+              <button onClick={setImage} type="submit" className="btn btn-dark text-light col-2 mt-2">Submit</button>
           </div>
           </form>
          
