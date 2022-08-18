@@ -1,12 +1,13 @@
 import React from 'react'
 import './PostArticle.css'
 import * as Icon from 'react-bootstrap-icons';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 
 
 
 const PostArticle = ({ user }) => {
 
+    const ref = useRef();
     const [img, setImg] = useState();
     const [imgLink, setImgLink] = useState();
     const[article, setArticle] = useState({
@@ -207,7 +208,7 @@ const PostArticle = ({ user }) => {
               }
               >
               </input>
-              <input type='file' onChange={onImgChange}/>
+              <input type='file' onChange={onImgChange} ref={ref} />
               <img src={img} alt="article" style={{width:"200px"}}/>
               <button onClick={postArticle} type="submit" className="btn btn-dark text-light col-2 mt-2">Submit</button>
           </div>

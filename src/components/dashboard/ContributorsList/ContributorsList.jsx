@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import './ContributorsList.css'
 import * as Icon from 'react-bootstrap-icons';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+
+
+
 
 // name
 // email
@@ -11,6 +14,7 @@ import Button from 'react-bootstrap/Button';
 
 const ContributorsList = ({ user }) => {
 
+    const ref = useRef();
     const [img, setImg] = useState();
     const [imgLink, setImgLink] = useState();
     const[contributor, setContributor] = useState({
@@ -112,6 +116,7 @@ const ContributorsList = ({ user }) => {
             image: '',
             postedBy: user._id, 
           });
+          ref.current.value = "";
         }
       } catch (err) {
         console.log(err.message);
@@ -212,9 +217,12 @@ const ContributorsList = ({ user }) => {
               >
               </input>
               <br/>
-              <input type='file' onChange={onImgChange}/>
+              
+              <input type='file' onChange={onImgChange}  ref={ref} />
               <img src={img} alt="article" style={{width:"200px"}}/>
+              
               <button onClick={setImage} type="submit" className="btn btn-dark text-light col-2 mt-2">Submit</button>
+              
           </div>
           </form>
          
