@@ -78,6 +78,8 @@ const PostArticle = ({ user }) => {
                 image: '',
                 postedBy: user._id, 
               });
+              ref.current.value = "";
+              setImg("")
             }
           } catch (err) {
             console.log(err.message);
