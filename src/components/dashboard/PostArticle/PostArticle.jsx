@@ -211,12 +211,12 @@ const PostArticle = ({ user }) => {
               >
               </input>
               <input type='file' onChange={onImgChange} ref={ref} />
-              <img src={img} alt="article" style={{width:"200px"}}/>
+              <img src={img}  style={{width:"200px"}}/>
               <button onClick={postArticle} type="submit" className="btn btn-dark text-light col-2 mt-2">Submit</button>
           </div>
           </form>
          
-      
+          {/* alt="article"  */}
        
        
       </div>

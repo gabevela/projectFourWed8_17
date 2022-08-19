@@ -220,7 +220,7 @@ const ContributorsList = ({ user }) => {
               <br/>
               
               <input type='file' onChange={onImgChange}  ref={ref} />
-              <img src={img} alt="article" style={{width:"200px"}}/>
+              <img src={img}  style={{width:"200px"}}/>
               
               <button onClick={setImage} type="submit" className="btn btn-dark text-light col-2 mt-2">Submit</button>
               
